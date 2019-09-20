@@ -1,0 +1,37 @@
+.parent{
+    -fx-background-color: #fff;
+}
+.sidebar{
+    -fx-background-color: #343a40;
+}
+.title{
+    -fx-label-padding: 30 15 30 15;
+    -fx-text-fill: #c6c0c0;
+    -fx-font-size: 30;
+}
+.title-icon{
+    -fx-font-size: 35;
+    -fx-padding: 0 15 0 0;
+}
+.bucket-link{
+    -fx-font-size: 18;
+    -fx-wrap-text: true;
+    -fx-underline: false;
+    -fx-label-padding: 0 10 0 10;
+    -fx-text-fill: #65b9c7;
+}
+.bucket-link:visited{
+    -fx-text-fill: #65b9c7;
+}
+.bucket-link:hover{
+    -fx-text-fill: #368896;
+}
+.object-tree{
+    -fx-font-size: 15;
+}
+.small-icon{
+    -fx-min-height: 128px;
+    -fx-min-width: 128px;
+    -fx-text-fill: #65b9c7;
+    -fx-background-color: #343a40;
+}
