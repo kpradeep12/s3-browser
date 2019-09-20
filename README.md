@@ -5,3 +5,4 @@ This is a desktop application (under development) to navigate AWS S3 object stor
 
 ### Tech Stack
 * JavaFX
+* AWS S3 2.0
