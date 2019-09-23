@@ -1,21 +1,12 @@
 package net.thetechstack.controllers;
 
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import javafx.util.Callback;
 import net.thetechstack.models.AWSObject;
 import net.thetechstack.service.AWSObjectService;
@@ -39,8 +30,10 @@ public class S3BrowserController {
 
         downloadMenu.setOnAction(event -> {
             AWSObject object = objectTreeTable.getSelectionModel().getSelectedItem().getValue();
-            System.out.println(object.getBucket()+" - "+object.getFullKey());
-            store.downloadObject(object.getBucket(), object.getFullKey(), object.getKey());
+            object.setDownload(true);
+            System.out.println(object);
+            //if(object != null && object.getFullKey() != null)
+              //  store.downloadObject(object);
         });
         uploadMenu.setOnAction(event -> {
             System.out.println(objectTreeTable.getSelectionModel().getSelectedItem().getValue().getKey());
@@ -72,70 +65,86 @@ public class S3BrowserController {
             });
             bucketVBox.getChildren().add(link);
         });
-        configureTreeTableColumn(keyCol, "key", 0.5);
-        configureTreeTableColumn(lastModCol, "lastModified", 0.2);
-        configureTreeTableColumn(sizeCol, "size", 0.1);
-        configureTreeTableColumn(ownerCol, "owner", 0.2);
-        //configureTreeTableColumn(actionsCol, "", 0.1);
-        //keyCol.setCellValueFactory(new TreeItemPropertyValueFactory<>("key"));
-        //keyCol.prefWidthProperty().bind(objectTreeTable.widthProperty().multiply(0.4));
-        //lastModCol.setCellValueFactory(new TreeItemPropertyValueFactory<>("lastModified"));
-        //lastModCol.prefWidthProperty().bind(objectTreeTable.widthProperty().multiply(0.2));
-        //sizeCol.setCellValueFactory(new TreeItemPropertyValueFactory<>("size"));
-        //sizeCol.prefWidthProperty().bind(objectTreeTable.widthProperty().multiply(0.1));
-        //ownerCol.setCellValueFactory(new TreeItemPropertyValueFactory<>("owner"));
-        //ownerCol.prefWidthProperty().bind(objectTreeTable.widthProperty().multiply(0.2));
-        /*actionsCol.setCellValueFactory(c -> new SimpleObjectProperty<>(getImageView(
-                c.getValue().getValue().isFolder() ? "upload" : "download"
-        )));*/
-        //actionsCol.setSortable(false);
+        //configureTreeTableColumn(keyCol, "key", 0.6);
+        keyCol.prefWidthProperty().bind(objectTreeTable.widthProperty().multiply(0.6));
         //actionsCol.setCellFactory(c -> new SimpleObjectProperty<>(getDownloadButton("")));
-        /*actionsCol.setCellFactory(new Callback<>() {
-            @Override
-            public TreeTableCell<AWSObject, String> call(TreeTableColumn<AWSObject, String> p) {
-                TreeTableCell<AWSObject, String> cell = new TreeTableCell<>() {
-                    private Button button = new Button();
+        keyCol.setCellValueFactory(awsObjectStringCellDataFeatures ->
+                new ReadOnlyObjectWrapper<>(awsObjectStringCellDataFeatures.getValue().getValue().getKey())
+        );
 
+        keyCol.setCellFactory(new Callback<>() {
+            @Override public TreeTableCell<AWSObject, String> call(TreeTableColumn<AWSObject, String> p) {
+                return new TreeTableCell<>() {
                     @Override
                     protected void updateItem(String item, boolean empty) {
                         super.updateItem(item, empty);
-                        if (empty) {
-                            setGraphic(null);
+                        if (!empty && item != null) {
+
+                            setText(item);
+                            this.getTreeTableRow().getItem().downloadProperty().addListener((observableValue, aBoolean, t1) -> {
+                                        if (t1) {
+                                            ProgressIndicator progressIndicator = new ProgressIndicator(0);
+                                            progressIndicator.setMaxWidth(15);
+                                            progressIndicator.setMaxHeight(15);
+                                            if (this.getTreeTableRow().getItem() != null && this.getTreeTableRow().getItem().getFullKey() != null) {
+                                                setGraphic(progressIndicator);
+                                                store.downloadObject(this.getTreeTableRow().getItem(), progressIndicator);
+                                            }
+                                        } else {
+                                            setGraphic(null);
+                                        }
+                                    });
+                            //setGraphic(imageView);
                         } else {
-                            button.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/icons/download.png"), 12, 12, true, true)));
-                            button.setPadding(new Insets(0, 5, 0, 5));
-                            setGraphic(button);
-                            button.setOnAction(event -> {
-                                System.out.println(objectTreeTable.getSelectionModel().getSelectedItem().getValue().getKey());
-                            });
+                            setText(null);
+                            setGraphic(null);
                         }
+
+                        /*if (empty) {
+                            setGraphic(null);
+                        } else {*/
+                            //Label lbl = new Label(this.getTreeTableRow().getItem().getKey());
+                            //setGraphic(lbl);
+                           //setText(this.getTreeTableRow().getItem().getKey());
+                                /*this.getTreeTableRow().getItem().downloadProperty().addListener((observableValue, aBoolean, t1) -> {
+                                    if(t1) {
+                                        ProgressIndicator progressIndicator = new ProgressIndicator();
+                                        progressIndicator.setMaxWidth(15);
+                                        progressIndicator.setMaxHeight(15);
+                                        if (this.getTreeTableRow().getItem() != null && this.getTreeTableRow().getItem().getFullKey() != null) {
+                                            setGraphic(progressIndicator);
+                                            store.downloadObject(this.getTreeTableRow().getItem(), progressIndicator);
+                                        }
+                                    }else{
+                                        setGraphic(null);
+                                    }
+                            });
+                            setGraphic(null);*/
+                        //}
                     }
                 };
-                return cell;
             }
-        });*/
+        });
 
 
-        //actionsCol.setCellValueFactory(c -> new PropertyValueFactory<>("Test"));
-        //actionsCol.prefWidthProperty().bind(objectTreeTable.widthProperty().multiply(0.1));
-        //objectTreeTable.getColumns().addAll(col1, col2, col3, col4, col5);
-
+        configureTreeTableColumn(lastModCol, "lastModified", 0.2);
+        configureTreeTableColumn(sizeCol, "size", 0.1);
+        configureTreeTableColumn(ownerCol, "owner", 0.1);
+        //configureTreeTableColumn(actionsCol, "", 0.1);
+        //keyCol.setCellValueFactory(new TreeItemPropertyValueFactory<>("key"));
+        //keyCol.prefWidthProperty().bind(objectTreeTable.widthProperty().multiply(0.4));
+        /*actionsCol.setCellValueFactory(c -> new SimpleObjectProperty<>(getImageView(
+                c.getValue().getValue().isFolder() ? "upload" : "download"
+        )));*/
     }
 
-    private ImageView getImageView(String icon) {
+    /*private ImageView getImageView(String icon) {
         Image image = new Image(getClass().getResourceAsStream("/icons/" + icon + ".png"), 128, 128, true, true);
         ImageView imageView = new ImageView(image);
         imageView.setCache(true);
         imageView.setStyle("-fx-min-height: 128px;");
         return imageView;
-    }
-    private Button getDownloadButton(String icon) {
-        Image image = new Image(getClass().getResourceAsStream("/icons/download.png"), 12, 12, true, true);
-        Button button = new Button();
-        button.setGraphic(new ImageView(image));
-        button.setPadding(new Insets(0, 5, 0, 5));
-        return button;
-    }
+    }*/
 
     private void configureTreeTableColumn(TreeTableColumn col, String name, double width){
         col.setCellValueFactory(new TreeItemPropertyValueFactory<>(name));
@@ -147,37 +156,3 @@ public class S3BrowserController {
 
     }*/
 }
-/*
-private class AddPersonCell extends TreeCell<AWSObject> {
-    // a button for adding a new person.
-    final Button addButton       = new Button("Add");
-    // pads and centers the add button in the cell.
-    final StackPane paddedButton = new StackPane();
-    // records the y pos of the last button press so that the add person dialog can be shown next to the cell.
-    final DoubleProperty buttonY = new SimpleDoubleProperty();
-
-    AddPersonCell(final TreeTableView table) {
-        paddedButton.setPadding(new Insets(3));
-        paddedButton.getChildren().add(addButton);
-        addButton.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override public void handle(MouseEvent mouseEvent) {
-                buttonY.set(mouseEvent.getScreenY());
-            }
-        });
-        addButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent actionEvent) {
-                //showAddPersonDialog(stage, table, buttonY.get());
-                System.out.println("Button clicked");
-                //table.getSelectionModel().select(getTableRow().getIndex());
-            }
-        });
-    }
-
-    @Override protected void updateItem(Boolean item, boolean empty) {
-        super.updateItem(item, empty);
-        if (!empty) {
-            setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-            setGraphic(paddedButton);
-        }
-    }
-}*/

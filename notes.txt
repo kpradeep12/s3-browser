@@ -1,1 +1,19 @@
-icons release https://www.jensd.de/wordpress/?p=2686
+Icons:
+https://www.jensd.de/wordpress/?p=2686
+https://www.iconfinder.com/search/?q=folder&price=free
+
+AWS:
+https://docs.aws.amazon.com/sdk-for-java/v2/developer-guide/examples-s3-objects.html?shortFooter=true#download-object
+https://www.baeldung.com/aws-s3-java
+https://docs.aws.amazon.com/AmazonS3/latest/dev/ListingObjectKeysUsingJava.html
+
+Themes:
+https://themes.getbootstrap.com/
+https://themes.getbootstrap.com/preview/?theme_id=4974&show_new=
+
+Color Picker:
+https://www.w3schools.com/colors/colors_picker.asp
+
+Packaging:
+https://docs.oracle.com/javafx/2/threads/jfxpub-threads.htm
+https://www.mirkosertic.de/blog/2019/04/java-desktop-packaging/

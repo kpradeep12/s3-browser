@@ -16,6 +16,7 @@ public class AWSObject {
     private SimpleLongProperty size;
     private SimpleStringProperty owner;
     private SimpleBooleanProperty folder;
+    private SimpleBooleanProperty download = new SimpleBooleanProperty(false);
 
     public AWSObject(String bucket, String key){
         this.bucket = new SimpleStringProperty(bucket);
@@ -58,7 +59,7 @@ public class AWSObject {
     }
 
     public String getFullKey() {
-        return fullKey.get();
+        return fullKey == null ? null : fullKey.get();
     }
 
     public SimpleStringProperty fullKeyProperty() {
@@ -67,6 +68,18 @@ public class AWSObject {
 
     public void setFullKey(String fullKey) {
         this.fullKey.set(fullKey);
+    }
+
+    public boolean isDownload() {
+        return download.get();
+    }
+
+    public SimpleBooleanProperty downloadProperty() {
+        return download;
+    }
+
+    public void setDownload(boolean download) {
+        this.download.set(download);
     }
 
     public String getLastModified() {

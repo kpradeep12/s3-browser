@@ -1,15 +1,18 @@
 package net.thetechstack.service;
 
 import javafx.concurrent.Task;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TreeItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import net.thetechstack.models.AWSObject;
+import software.amazon.awssdk.core.ResponseInputStream;
 import software.amazon.awssdk.core.sync.ResponseTransformer;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
 
+import java.io.*;
 import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.*;
@@ -113,18 +116,36 @@ public class AWSObjectService {
         return tree;
     }
 
-    public void downloadObject(String bucket, String fullKey, String key){
+    public void downloadObject(AWSObject object, ProgressIndicator progressIndicator){
         String home = System.getProperty("user.home");
         /*s3Client.getObject(GetObjectRequest.builder().bucket(bucket).key(fullKey).build(),
                 ResponseTransformer.toFile(Paths.get(home+"/Downloads/" + key)));*/
         Task downloadTask = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
-                s3Client.getObject(GetObjectRequest.builder().bucket(bucket).key(fullKey).build(),
-                        ResponseTransformer.toFile(Paths.get(home+"/Downloads/" + key)));
+                ResponseInputStream<GetObjectResponse> input = s3Client.getObject(GetObjectRequest.builder().bucket(object.getBucket()).key(object.getFullKey()).build());
+                FileOutputStream fos = new FileOutputStream(new File(home+"/Downloads/" + object.getKey()));
+
+                long max = object.getSize();
+                long currentSize = 0L;
+                updateProgress(currentSize, max);
+                byte[] read_buf = new byte[1024];
+                int read_len;
+                while ((read_len = input.read(read_buf)) > 0) {
+                    fos.write(read_buf, 0, read_len);
+                    currentSize = currentSize + read_len;
+                    updateProgress(currentSize, max);
+                    Thread.sleep(1000);
+                }
+                fos.close();
+                input.close();
                 return null;
             }
+            @Override protected void succeeded() {
+                object.setDownload(false);
+            }
         };
+        progressIndicator.progressProperty().bind(downloadTask.progressProperty());
         new Thread(downloadTask).start();
     }
 

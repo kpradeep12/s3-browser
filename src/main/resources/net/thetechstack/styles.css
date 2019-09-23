@@ -35,3 +35,10 @@
     -fx-text-fill: #65b9c7;
     -fx-background-color: #343a40;
 }
+.progress-indicator .percentage {
+    -fx-fill: null;
+}
+.progress-indicator  {
+    -fx-padding: 0 0 -30 0;
+    -fx-progress-color: #e6b800;
+}
