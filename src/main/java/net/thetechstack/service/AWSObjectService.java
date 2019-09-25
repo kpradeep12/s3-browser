@@ -55,7 +55,7 @@ public class AWSObjectService {
         new Thread(keysListTask).start();
         return keysListTask;
     }
-    public Task<TreeItem<AWSObject>> getSubPathsInS3Prefix(String bucketName, String prefix) {
+    public Task<TreeItem<AWSObject>> getSubPathsInS3Prefix(String bucketName) {
         Task<TreeItem<AWSObject>> keysListTask = new Task<>() {
             @Override
             protected TreeItem<AWSObject> call() {

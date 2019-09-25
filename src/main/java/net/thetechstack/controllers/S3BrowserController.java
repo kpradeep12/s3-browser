@@ -43,7 +43,7 @@ public class S3BrowserController {
                 link.setText(bucket);
                 link.getStyleClass().add("bucket-link");
                 link.setOnAction(e -> {
-                    Task<TreeItem<AWSObject>> listTask = store.getSubPathsInS3Prefix(bucket, "/");
+                    Task<TreeItem<AWSObject>> listTask = store.getSubPathsInS3Prefix(bucket);
                     listTask.setOnSucceeded(root -> {
                         objectTreeTable.setRoot(listTask.getValue());
                     });
