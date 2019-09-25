@@ -1,3 +1,4 @@
+.root { -fx-focus-color: transparent; }
 .parent{
     -fx-background-color: #fff;
 }
@@ -5,7 +6,7 @@
     -fx-background-color: #343a40;
 }
 .title{
-    -fx-label-padding: 30 15 30 15;
+    -fx-label-padding: 30 10 30 10;
     -fx-text-fill: #c6c0c0;
     -fx-font-size: 30;
 }
@@ -40,5 +41,24 @@
 }
 .progress-indicator  {
     -fx-padding: 0 0 -30 0;
-    -fx-progress-color: #e6b800;
+    -fx-progress-color: #ff9933;
+    -fx-control-inner-background: #ffe6cc;
+}
+.tree-table-row-cell {
+    -fx-background-color: -fx-table-cell-border-color, -fx-control-inner-background;
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-padding: 0.0em;
+    -fx-text-fill: -fx-text-inner-color;
+}
+.tree-table-row-cell:selected {
+    -fx-background-color: -fx-focus-color, -fx-cell-focus-inner-border, -fx-focus-color;
+    -fx-background-insets: 0, 1, 2;
+}
+.tree-table-row-cell:odd {
+    -fx-background-color: -fx-table-cell-border-color, derive(-fx-control-inner-background,-5%);
+    -fx-background-insets: 0, 0 0 1 0;
+}
+.tree-table-row-cell:selected:odd {
+    -fx-background-color: -fx-focus-color, -fx-cell-focus-inner-border, -fx-focus-color;
+    -fx-background-insets: 0, 1, 2;
 }

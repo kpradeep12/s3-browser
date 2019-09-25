@@ -35,7 +35,7 @@
             <groupId>software.amazon.awssdk</groupId>
             <artifactId>s3</artifactId>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>de.jensd</groupId>
             <artifactId>fontawesomefx-commons</artifactId>
             <version>9.0.0</version>
@@ -45,7 +45,7 @@
             <groupId>de.jensd</groupId>
             <artifactId>fontawesomefx-fontawesome</artifactId>
             <version>4.7.0-9</version>
-        </dependency>
+        </dependency>-->
     </dependencies>
     <build>
         <plugins>
