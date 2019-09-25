@@ -1,7 +1,5 @@
 # s3-browser
-AWS S3 Storage Desktop Browser
-
-This is a desktop application to navigate AWS S3 object store as a file system. I used JavaFX.
+AWS S3 Storage Desktop Browser is used to navigate AWS S3 object store as a file system.
 
 #### Demo
 
@@ -25,7 +23,7 @@ https://www.iconfinder.com/search/?q=folder&price=free
 https://docs.aws.amazon.com/sdk-for-java/v2/developer-guide/examples-s3-objects.html?shortFooter=true#download-object
 https://www.baeldung.com/aws-s3-java
 https://docs.aws.amazon.com/AmazonS3/latest/dev/ListingObjectKeysUsingJava.html
-##### Themes
+##### Color Theme Reference
 https://themes.getbootstrap.com/
 https://themes.getbootstrap.com/preview/?theme_id=4974&show_new=
 ##### Color Picker
